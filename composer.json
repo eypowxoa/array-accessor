@@ -1,0 +1,41 @@
+{
+    "name": "eypowxoa/array-accessor",
+    "description": "Typed getters to PHP arrays.",
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "php": "^8.2"
+    },
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.47",
+        "friendsofphp/php-cs-fixer": "dev-master",
+        "phpunit/phpunit": "^11.5",
+        "roave/security-advisories": "dev-master",
+        "shipmonk/composer-dependency-analyser": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Eypowxoa\\ArrayAccessor\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Eypowxoa\\ArrayAccessor\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true
+        }
+    },
+    "scripts": {
+        "checklist": [
+            "composer check-platform-reqs",
+            "composer validate --no-interaction --strict",
+            "composer normalize --dry-run --no-interaction",
+            "composer exec composer-dependency-analyser",
+            "composer exec php-cs-fixer check",
+            "composer exec phpunit"
+        ]
+    }
+}
