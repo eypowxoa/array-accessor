@@ -7,4 +7,4 @@ namespace Eypowxoa\ArrayAccessor\Exceptions;
 /**
  * No such key is the source array.
  */
-class MissingKeyException extends ArrayAccessException {}
+final class MissingKeyException extends ArrayAccessException {}

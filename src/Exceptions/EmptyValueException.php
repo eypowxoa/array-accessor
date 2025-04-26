@@ -7,4 +7,4 @@ namespace Eypowxoa\ArrayAccessor\Exceptions;
 /**
  * Got empty value when value required to not be empty.
  */
-class EmptyValueException extends WrongValueException {}
+final class EmptyValueException extends WrongValueException {}
