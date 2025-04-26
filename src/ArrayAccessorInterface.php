@@ -511,4 +511,13 @@ interface ArrayAccessorInterface
      * @return bool true if key exists or false if not
      */
     public function hasKey(int|string $key): bool;
+
+    /**
+     * Checks if value of the specified key is null.
+     *
+     * @return bool true if value is null or false if not
+     *
+     * @throws MissingKeyException when no such key in the source array
+     */
+    public function isNull(int|string $key): bool;
 }
