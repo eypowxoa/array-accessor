@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Eypowxoa\ArrayAccessor;
 
+use DateTimeImmutable;
 use Eypowxoa\ArrayAccessor\Exceptions\EmptyValueException;
 use Eypowxoa\ArrayAccessor\Exceptions\MissingKeyException;
 use Eypowxoa\ArrayAccessor\Exceptions\NullValueException;
@@ -39,6 +40,38 @@ interface ArrayAccessorInterface
      * Apply trim function.
      */
     public const TRIMMED = 2;
+
+    /**
+     * Associative array field of the source array.
+     *
+     * @param int|string $key key of the source array
+     *
+     * @return ArrayAccessorInterface value for specified key
+     *
+     * @throws MissingKeyException when no such key in the source array
+     * @throws NullValueException  when value is null
+     * @throws WrongTypeException  when value is not an associative array
+     */
+    public function getAssociative(
+        int|string $key,
+    ): self;
+
+    /**
+     * Associative array field of the source array or null.
+     *
+     * @param int|string $key   key of the source array
+     * @param int        $flags bit mask of constants NOTNULL, REQUIRED
+     *
+     * @return ?ArrayAccessorInterface value for specified key
+     *
+     * @throws MissingKeyException when flag REQUIRED is set and no such key in the source array
+     * @throws NullValueException  when flag NOTNULL is set and value is null
+     * @throws WrongTypeException  when value is not an associative array
+     */
+    public function getAssociativeOptional(
+        int|string $key,
+        int $flags = 0,
+    ): ?self;
 
     /**
      * Boolean field of the source array.
@@ -77,6 +110,90 @@ interface ArrayAccessorInterface
         int|string $key,
         int $flags = 0,
     ): ?bool;
+
+    /**
+     * Date field of the source array.
+     *
+     * @param int|string $key     key of the source array
+     * @param int        $flags   bit mask of constants PARSED
+     * @param string[]   $formats allowed date formats for DateTimeImmutable::createFromFormat function
+     *
+     * @return \DateTimeImmutable value for specified key
+     *
+     * @throws MissingKeyException when no such key in the source array
+     * @throws NullValueException  when value is null
+     * @throws WrongTypeException  when flag PARSED is not set and value is not a DateTimeInterface or flag PARSED is set and value is not a string in specified formats
+     */
+    public function getDate(
+        int|string $key,
+        int $flags = 0,
+        string ...$formats,
+    ): \DateTimeImmutable;
+
+    /**
+     * Date field of the source array or null.
+     *
+     * @param int|string $key     key of the source array
+     * @param int        $flags   bit mask of constants NOTNULL, PARSED, REQUIRED
+     * @param string[]   $formats allowed date formats for DateTimeImmutable::createFromFormat function
+     *
+     * @return ?\DateTimeImmutable value for specified key
+     *
+     * @throws MissingKeyException when flag REQUIRED is set and no such key in the source array
+     * @throws NullValueException  when flag NOTNULL is set and value is null
+     * @throws WrongTypeException  when flag PARSED is not set and value is not a DateTimeInterface or flag PARSED is set and value is not a string in specified formats
+     */
+    public function getDateOptional(
+        int|string $key,
+        int $flags = 0,
+        string ...$formats,
+    ): ?\DateTimeImmutable;
+
+    /**
+     * Enum field of the source array.
+     *
+     * Use PARSED flag to get backed enum case by scalar value.
+     *
+     * @template T
+     *
+     * @param int|string      $key   key of the source array
+     * @param class-string<T> $class enum FQCN
+     * @param int             $flags bit mask of constants PARSED
+     *
+     * @return T enum case for specified key
+     *
+     * @throws MissingKeyException when no such key in the source array
+     * @throws NullValueException  when value is null
+     * @throws WrongTypeException  when value is not a case of specified enum
+     */
+    public function getEnum(
+        int|string $key,
+        string $class,
+        int $flags = 0,
+    ): object;
+
+    /**
+     * Enum field of the source array or null.
+     *
+     * Use PARSED flag to get backed enum case by scalar value.
+     *
+     * @template T
+     *
+     * @param int|string      $key   key of the source array
+     * @param class-string<T> $class enum FQCN
+     * @param int             $flags bit mask of constants NOTNULL, PARSED, REQUIRED
+     *
+     * @return ?T enum case for specified key
+     *
+     * @throws MissingKeyException when flag REQUIRED is set and no such key in the source array
+     * @throws NullValueException  when flag NOTNULL is set and value is null
+     * @throws WrongTypeException  when value is not a case of specified enum
+     */
+    public function getEnumOptional(
+        int|string $key,
+        string $class,
+        int $flags = 0,
+    ): ?object;
 
     /**
      * False field of the source array.
@@ -161,6 +278,46 @@ interface ArrayAccessorInterface
     ): ?float;
 
     /**
+     * Object field of the source array.
+     *
+     * @template T
+     *
+     * @param int|string      $key   key of the source array
+     * @param class-string<T> $class value FQCN
+     *
+     * @return T value for specified key
+     *
+     * @throws MissingKeyException when no such key in the source array
+     * @throws NullValueException  when value is null
+     * @throws WrongTypeException  when value is not an instance of specified type
+     */
+    public function getInstance(
+        int|string $key,
+        string $class,
+    ): object;
+
+    /**
+     * Object field of the source array or null.
+     *
+     * @template T
+     *
+     * @param int|string      $key   key of the source array
+     * @param class-string<T> $class value FQCN
+     * @param int             $flags bit mask of constants NOTNULL, REQUIRED
+     *
+     * @return ?T value for specified key
+     *
+     * @throws MissingKeyException when flag REQUIRED is set and no such key in the source array
+     * @throws NullValueException  when flag NOTNULL is set and value is null
+     * @throws WrongTypeException  when value is not an instance of specified type
+     */
+    public function getInstanceOptional(
+        int|string $key,
+        string $class,
+        int $flags = 0,
+    ): ?object;
+
+    /**
      * Integer field of the source array.
      *
      * @param int|string $key     key of the source array
@@ -214,6 +371,38 @@ interface ArrayAccessorInterface
      * @return (int|string)[] list of keys
      */
     public function getKeys(): array;
+
+    /**
+     * Indexed list field of the source array.
+     *
+     * @param int|string $key key of the source array
+     *
+     * @return ArrayAccessorInterface value for specified key
+     *
+     * @throws MissingKeyException when no such key in the source array
+     * @throws NullValueException  when value is null
+     * @throws WrongTypeException  when value is not an indexed list
+     */
+    public function getList(
+        int|string $key,
+    ): self;
+
+    /**
+     * Indexed list field of the source array or null.
+     *
+     * @param int|string $key   key of the source array
+     * @param int        $flags bit mask of constants NOTNULL, REQUIRED
+     *
+     * @return ?ArrayAccessorInterface value for specified key
+     *
+     * @throws MissingKeyException when flag REQUIRED is set and no such key in the source array
+     * @throws NullValueException  when flag NOTNULL is set and value is null
+     * @throws WrongTypeException  when value is not an indexed list
+     */
+    public function getListOptional(
+        int|string $key,
+        int $flags = 0,
+    ): ?self;
 
     /**
      * Null field of the source array.
