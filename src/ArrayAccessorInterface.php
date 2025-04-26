@@ -99,7 +99,7 @@ interface ArrayAccessorInterface
      * False field of the source array or null.
      *
      * @param int|string $key   key of the source array
-     * @param int        $flags bit mask of constants REQUIRED
+     * @param int        $flags bit mask of constants NOTNULL, PARSED, REQUIRED
      *
      * @return ?false value for specified key
      *
