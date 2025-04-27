@@ -6,6 +6,8 @@ namespace Eypowxoa\ArrayAccessor\Tests;
 
 use Eypowxoa\ArrayAccessor\ArrayAccessor;
 use Eypowxoa\ArrayAccessor\Exceptions\MissingKeyException;
+use Eypowxoa\ArrayAccessor\Exceptions\NullValueException;
+use Eypowxoa\ArrayAccessor\Exceptions\WrongTypeException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -168,7 +170,210 @@ final class ArrayAccessorTest extends TestCase
 
     public static function provideGetTrueOptional(): array
     {
-        return [];
+        $f = ArrayAccessor::FILLED;
+        $n = ArrayAccessor::NOTNULL;
+        $p = ArrayAccessor::PARSED;
+        $r = ArrayAccessor::REQUIRED;
+
+        return [
+            [['key' => ' 0 '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' 1 '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' 2 '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' fAlSe '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' nO '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' tRuE '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' wRoNg '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' yEs '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ''], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0.0], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0.1], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1.0], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1.2], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 2], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => []], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => false], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => null], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => true], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [[], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+
+            [['key' => ' 0 '], 'key', 0, null, new WrongTypeException('key', ' 0 ', 'true')],
+            [['key' => ' 1 '], 'key', 0, null, new WrongTypeException('key', ' 1 ', 'true')],
+            [['key' => ' 2 '], 'key', 0, null, new WrongTypeException('key', ' 2 ', 'true')],
+            [['key' => ' fAlSe '], 'key', 0, null, new WrongTypeException('key', ' fAlSe ', 'true')],
+            [['key' => ' nO '], 'key', 0, null, new WrongTypeException('key', ' nO ', 'true')],
+            [['key' => ' tRuE '], 'key', 0, null, new WrongTypeException('key', ' tRuE ', 'true')],
+            [['key' => ' wRoNg '], 'key', 0, null, new WrongTypeException('key', ' wRoNg ', 'true')],
+            [['key' => ' yEs '], 'key', 0, null, new WrongTypeException('key', ' yEs ', 'true')],
+            [['key' => ''], 'key', 0, null, new WrongTypeException('key', '', 'true')],
+            [['key' => 0.0], 'key', 0, null, new WrongTypeException('key', 0.0, 'true')],
+            [['key' => 0.1], 'key', 0, null, new WrongTypeException('key', 0.1, 'true')],
+            [['key' => 0], 'key', 0, null, new WrongTypeException('key', 0, 'true')],
+            [['key' => 1.0], 'key', 0, null, new WrongTypeException('key', 1.0, 'true')],
+            [['key' => 1.2], 'key', 0, null, new WrongTypeException('key', 1.2, 'true')],
+            [['key' => 1], 'key', 0, null, new WrongTypeException('key', 1, 'true')],
+            [['key' => 2], 'key', 0, null, new WrongTypeException('key', 2, 'true')],
+            [['key' => []], 'key', 0, null, new WrongTypeException('key', [], 'true')],
+            [['key' => false], 'key', 0, null, new WrongTypeException('key', false, 'true')],
+            [['key' => null], 'key', 0, null, null],
+            [['key' => true], 'key', 0, true, null],
+            [[], 'key', 0, null, null],
+
+            [['key' => ' 0 '], 'key', $r, null, new WrongTypeException('key', ' 0 ', 'true')],
+            [['key' => ' 1 '], 'key', $r, null, new WrongTypeException('key', ' 1 ', 'true')],
+            [['key' => ' 2 '], 'key', $r, null, new WrongTypeException('key', ' 2 ', 'true')],
+            [['key' => ' fAlSe '], 'key', $r, null, new WrongTypeException('key', ' fAlSe ', 'true')],
+            [['key' => ' nO '], 'key', $r, null, new WrongTypeException('key', ' nO ', 'true')],
+            [['key' => ' tRuE '], 'key', $r, null, new WrongTypeException('key', ' tRuE ', 'true')],
+            [['key' => ' wRoNg '], 'key', $r, null, new WrongTypeException('key', ' wRoNg ', 'true')],
+            [['key' => ' yEs '], 'key', $r, null, new WrongTypeException('key', ' yEs ', 'true')],
+            [['key' => ''], 'key', $r, null, new WrongTypeException('key', '', 'true')],
+            [['key' => 0.0], 'key', $r, null, new WrongTypeException('key', 0.0, 'true')],
+            [['key' => 0.1], 'key', $r, null, new WrongTypeException('key', 0.1, 'true')],
+            [['key' => 0], 'key', $r, null, new WrongTypeException('key', 0, 'true')],
+            [['key' => 1.0], 'key', $r, null, new WrongTypeException('key', 1.0, 'true')],
+            [['key' => 1.2], 'key', $r, null, new WrongTypeException('key', 1.2, 'true')],
+            [['key' => 1], 'key', $r, null, new WrongTypeException('key', 1, 'true')],
+            [['key' => 2], 'key', $r, null, new WrongTypeException('key', 2, 'true')],
+            [['key' => []], 'key', $r, null, new WrongTypeException('key', [], 'true')],
+            [['key' => false], 'key', $r, null, new WrongTypeException('key', false, 'true')],
+            [['key' => null], 'key', $r, null, null],
+            [['key' => true], 'key', $r, true, null],
+            [[], 'key', $r, null, new MissingKeyException('key')],
+
+            [['key' => ' 0 '], 'key', $p, null, new WrongTypeException('key', ' 0 ', 'true')],
+            [['key' => ' 1 '], 'key', $p, true, null],
+            [['key' => ' 2 '], 'key', $p, null, new WrongTypeException('key', ' 2 ', 'true')],
+            [['key' => ' fAlSe '], 'key', $p, null, new WrongTypeException('key', ' fAlSe ', 'true')],
+            [['key' => ' nO '], 'key', $p, null, new WrongTypeException('key', ' nO ', 'true')],
+            [['key' => ' tRuE '], 'key', $p, true, null],
+            [['key' => ' wRoNg '], 'key', $p, null, new WrongTypeException('key', ' wRoNg ', 'true')],
+            [['key' => ' yEs '], 'key', $p, true, null],
+            [['key' => ''], 'key', $p, null, new WrongTypeException('key', '', 'true')],
+            [['key' => 0.0], 'key', $p, null, new WrongTypeException('key', 0.0, 'true')],
+            [['key' => 0.1], 'key', $p, null, new WrongTypeException('key', 0.1, 'true')],
+            [['key' => 0], 'key', $p, null, new WrongTypeException('key', 0, 'true')],
+            [['key' => 1.0], 'key', $p, null, new WrongTypeException('key', 1.0, 'true')],
+            [['key' => 1.2], 'key', $p, null, new WrongTypeException('key', 1.2, 'true')],
+            [['key' => 1], 'key', $p, true, null],
+            [['key' => 2], 'key', $p, null, new WrongTypeException('key', 2, 'true')],
+            [['key' => []], 'key', $p, null, new WrongTypeException('key', [], 'true')],
+            [['key' => false], 'key', $p, null, new WrongTypeException('key', false, 'true')],
+            [['key' => null], 'key', $p, null, null],
+            [['key' => true], 'key', $p, true, null],
+            [[], 'key', $p, null, null],
+
+            [['key' => ' 0 '], 'key', $p | $r, null, new WrongTypeException('key', ' 0 ', 'true')],
+            [['key' => ' 1 '], 'key', $p | $r, true, null],
+            [['key' => ' 2 '], 'key', $p | $r, null, new WrongTypeException('key', ' 2 ', 'true')],
+            [['key' => ' fAlSe '], 'key', $p | $r, null, new WrongTypeException('key', ' fAlSe ', 'true')],
+            [['key' => ' nO '], 'key', $p | $r, null, new WrongTypeException('key', ' nO ', 'true')],
+            [['key' => ' tRuE '], 'key', $p | $r, true, null],
+            [['key' => ' wRoNg '], 'key', $p | $r, null, new WrongTypeException('key', ' wRoNg ', 'true')],
+            [['key' => ' yEs '], 'key', $p | $r, true, null],
+            [['key' => ''], 'key', $p | $r, null, new WrongTypeException('key', '', 'true')],
+            [['key' => 0.0], 'key', $p | $r, null, new WrongTypeException('key', 0.0, 'true')],
+            [['key' => 0.1], 'key', $p | $r, null, new WrongTypeException('key', 0.1, 'true')],
+            [['key' => 0], 'key', $p | $r, null, new WrongTypeException('key', 0, 'true')],
+            [['key' => 1.0], 'key', $p | $r, null, new WrongTypeException('key', 1.0, 'true')],
+            [['key' => 1.2], 'key', $p | $r, null, new WrongTypeException('key', 1.2, 'true')],
+            [['key' => 1], 'key', $p | $r, true, null],
+            [['key' => 2], 'key', $p | $r, null, new WrongTypeException('key', 2, 'true')],
+            [['key' => []], 'key', $p | $r, null, new WrongTypeException('key', [], 'true')],
+            [['key' => false], 'key', $p | $r, null, new WrongTypeException('key', false, 'true')],
+            [['key' => null], 'key', $p | $r, null, null],
+            [['key' => true], 'key', $p | $r, true, null],
+            [[], 'key', $p | $r, null, new MissingKeyException('key')],
+
+            [['key' => ' 0 '], 'key', $n, null, new WrongTypeException('key', ' 0 ', 'true')],
+            [['key' => ' 1 '], 'key', $n, null, new WrongTypeException('key', ' 1 ', 'true')],
+            [['key' => ' 2 '], 'key', $n, null, new WrongTypeException('key', ' 2 ', 'true')],
+            [['key' => ' fAlSe '], 'key', $n, null, new WrongTypeException('key', ' fAlSe ', 'true')],
+            [['key' => ' nO '], 'key', $n, null, new WrongTypeException('key', ' nO ', 'true')],
+            [['key' => ' tRuE '], 'key', $n, null, new WrongTypeException('key', ' tRuE ', 'true')],
+            [['key' => ' wRoNg '], 'key', $n, null, new WrongTypeException('key', ' wRoNg ', 'true')],
+            [['key' => ' yEs '], 'key', $n, null, new WrongTypeException('key', ' yEs ', 'true')],
+            [['key' => ''], 'key', $n, null, new WrongTypeException('key', '', 'true')],
+            [['key' => 0.0], 'key', $n, null, new WrongTypeException('key', 0.0, 'true')],
+            [['key' => 0.1], 'key', $n, null, new WrongTypeException('key', 0.1, 'true')],
+            [['key' => 0], 'key', $n, null, new WrongTypeException('key', 0, 'true')],
+            [['key' => 1.0], 'key', $n, null, new WrongTypeException('key', 1.0, 'true')],
+            [['key' => 1.2], 'key', $n, null, new WrongTypeException('key', 1.2, 'true')],
+            [['key' => 1], 'key', $n, null, new WrongTypeException('key', 1, 'true')],
+            [['key' => 2], 'key', $n, null, new WrongTypeException('key', 2, 'true')],
+            [['key' => []], 'key', $n, null, new WrongTypeException('key', [], 'true')],
+            [['key' => false], 'key', $n, null, new WrongTypeException('key', false, 'true')],
+            [['key' => null], 'key', $n, null, new NullValueException('key')],
+            [['key' => true], 'key', $n, true, null],
+            [[], 'key', $n, null, null],
+
+            [['key' => ' 0 '], 'key', $n | $r, null, new WrongTypeException('key', ' 0 ', 'true')],
+            [['key' => ' 1 '], 'key', $n | $r, null, new WrongTypeException('key', ' 1 ', 'true')],
+            [['key' => ' 2 '], 'key', $n | $r, null, new WrongTypeException('key', ' 2 ', 'true')],
+            [['key' => ' fAlSe '], 'key', $n | $r, null, new WrongTypeException('key', ' fAlSe ', 'true')],
+            [['key' => ' nO '], 'key', $n | $r, null, new WrongTypeException('key', ' nO ', 'true')],
+            [['key' => ' tRuE '], 'key', $n | $r, null, new WrongTypeException('key', ' tRuE ', 'true')],
+            [['key' => ' wRoNg '], 'key', $n | $r, null, new WrongTypeException('key', ' wRoNg ', 'true')],
+            [['key' => ' yEs '], 'key', $n | $r, null, new WrongTypeException('key', ' yEs ', 'true')],
+            [['key' => ''], 'key', $n | $r, null, new WrongTypeException('key', '', 'true')],
+            [['key' => 0.0], 'key', $n | $r, null, new WrongTypeException('key', 0.0, 'true')],
+            [['key' => 0.1], 'key', $n | $r, null, new WrongTypeException('key', 0.1, 'true')],
+            [['key' => 0], 'key', $n | $r, null, new WrongTypeException('key', 0, 'true')],
+            [['key' => 1.0], 'key', $n | $r, null, new WrongTypeException('key', 1.0, 'true')],
+            [['key' => 1.2], 'key', $n | $r, null, new WrongTypeException('key', 1.2, 'true')],
+            [['key' => 1], 'key', $n | $r, null, new WrongTypeException('key', 1, 'true')],
+            [['key' => 2], 'key', $n | $r, null, new WrongTypeException('key', 2, 'true')],
+            [['key' => []], 'key', $n | $r, null, new WrongTypeException('key', [], 'true')],
+            [['key' => false], 'key', $n | $r, null, new WrongTypeException('key', false, 'true')],
+            [['key' => null], 'key', $n | $r, null, new NullValueException('key')],
+            [['key' => true], 'key', $n | $r, true, null],
+            [[], 'key', $n | $r, null, new MissingKeyException('key')],
+
+            [['key' => ' 0 '], 'key', $n | $p, null, new WrongTypeException('key', ' 0 ', 'true')],
+            [['key' => ' 1 '], 'key', $n | $p, true, null],
+            [['key' => ' 2 '], 'key', $n | $p, null, new WrongTypeException('key', ' 2 ', 'true')],
+            [['key' => ' fAlSe '], 'key', $n | $p, null, new WrongTypeException('key', ' fAlSe ', 'true')],
+            [['key' => ' nO '], 'key', $n | $p, null, new WrongTypeException('key', ' nO ', 'true')],
+            [['key' => ' tRuE '], 'key', $n | $p, true, null],
+            [['key' => ' wRoNg '], 'key', $n | $p, null, new WrongTypeException('key', ' wRoNg ', 'true')],
+            [['key' => ' yEs '], 'key', $n | $p, true, null],
+            [['key' => ''], 'key', $n | $p, null, new WrongTypeException('key', '', 'true')],
+            [['key' => 0.0], 'key', $n | $p, null, new WrongTypeException('key', 0.0, 'true')],
+            [['key' => 0.1], 'key', $n | $p, null, new WrongTypeException('key', 0.1, 'true')],
+            [['key' => 0], 'key', $n | $p, null, new WrongTypeException('key', 0, 'true')],
+            [['key' => 1.0], 'key', $n | $p, null, new WrongTypeException('key', 1.0, 'true')],
+            [['key' => 1.2], 'key', $n | $p, null, new WrongTypeException('key', 1.2, 'true')],
+            [['key' => 1], 'key', $n | $p, true, null],
+            [['key' => 2], 'key', $n | $p, null, new WrongTypeException('key', 2, 'true')],
+            [['key' => []], 'key', $n | $p, null, new WrongTypeException('key', [], 'true')],
+            [['key' => false], 'key', $n | $p, null, new WrongTypeException('key', false, 'true')],
+            [['key' => null], 'key', $n | $p, null, new NullValueException('key')],
+            [['key' => true], 'key', $n | $p, true, null],
+            [[], 'key', $n | $p, null, null],
+
+            [['key' => ' 0 '], 'key', $n | $p | $r, null, new WrongTypeException('key', ' 0 ', 'true')],
+            [['key' => ' 1 '], 'key', $n | $p | $r, true, null],
+            [['key' => ' 2 '], 'key', $n | $p | $r, null, new WrongTypeException('key', ' 2 ', 'true')],
+            [['key' => ' fAlSe '], 'key', $n | $p | $r, null, new WrongTypeException('key', ' fAlSe ', 'true')],
+            [['key' => ' nO '], 'key', $n | $p | $r, null, new WrongTypeException('key', ' nO ', 'true')],
+            [['key' => ' tRuE '], 'key', $n | $p | $r, true, null],
+            [['key' => ' wRoNg '], 'key', $n | $p | $r, null, new WrongTypeException('key', ' wRoNg ', 'true')],
+            [['key' => ' yEs '], 'key', $n | $p | $r, true, null],
+            [['key' => ''], 'key', $n | $p | $r, null, new WrongTypeException('key', '', 'true')],
+            [['key' => 0.0], 'key', $n | $p | $r, null, new WrongTypeException('key', 0.0, 'true')],
+            [['key' => 0.1], 'key', $n | $p | $r, null, new WrongTypeException('key', 0.1, 'true')],
+            [['key' => 0], 'key', $n | $p | $r, null, new WrongTypeException('key', 0, 'true')],
+            [['key' => 1.0], 'key', $n | $p | $r, null, new WrongTypeException('key', 1.0, 'true')],
+            [['key' => 1.2], 'key', $n | $p | $r, null, new WrongTypeException('key', 1.2, 'true')],
+            [['key' => 1], 'key', $n | $p | $r, true, null],
+            [['key' => 2], 'key', $n | $p | $r, null, new WrongTypeException('key', 2, 'true')],
+            [['key' => []], 'key', $n | $p | $r, null, new WrongTypeException('key', [], 'true')],
+            [['key' => false], 'key', $n | $p | $r, null, new WrongTypeException('key', false, 'true')],
+            [['key' => null], 'key', $n | $p | $r, null, new NullValueException('key')],
+            [['key' => true], 'key', $n | $p | $r, true, null],
+            [[], 'key', $n | $p | $r, null, new MissingKeyException('key')],
+        ];
     }
 
     public static function provideHasKey(): array
@@ -326,9 +531,19 @@ final class ArrayAccessorTest extends TestCase
         self::markTestIncomplete();
     }
 
-    public function testGetTrueOptional(): void
-    {
-        self::markTestIncomplete();
+    #[DataProvider('provideGetTrueOptional')]
+    public function testGetTrueOptional(
+        array $data,
+        int|string $key,
+        int $flags,
+        ?bool $expected,
+        ?\Throwable $error,
+    ): void {
+        if ($error instanceof \Throwable) {
+            $this->expectExceptionObject($error);
+        }
+
+        self::assertSame($expected, (new ArrayAccessor($data))->getTrueOptional($key, $flags));
     }
 
     #[DataProvider('provideHasKey')]

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Eypowxoa\ArrayAccessor;
 
 use Eypowxoa\ArrayAccessor\Exceptions\MissingKeyException;
+use Eypowxoa\ArrayAccessor\Exceptions\NullValueException;
+use Eypowxoa\ArrayAccessor\Exceptions\WrongTypeException;
 
 final class ArrayAccessor implements ArrayAccessorInterface
 {
@@ -219,7 +221,45 @@ final class ArrayAccessor implements ArrayAccessorInterface
         int|string $key,
         int $flags = 0,
     ): ?true {
-        throw new \LogicException('Not implemented');
+        self::assertFlags(self::NOTNULL | self::PARSED | self::REQUIRED, $flags);
+
+        if (!$this->hasKey($key)) {
+            if (self::hasFlag(self::REQUIRED, $flags)) {
+                throw new MissingKeyException($this->getKeyPath($key));
+            }
+
+            return null;
+        }
+
+        $value = $this->data[$key];
+
+        if (null === $value) {
+            if (self::hasFlag(self::NOTNULL, $flags)) {
+                throw new NullValueException($this->getKeyPath($key));
+            }
+
+            return null;
+        }
+
+        if (self::hasFlag(self::PARSED, $flags)) {
+            if (1 === $value) {
+                return true;
+            }
+
+            if (\is_string($value)) {
+                $parsed = filter_var($value, FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
+
+                if (true === $parsed) {
+                    return true;
+                }
+            }
+        }
+
+        if (true !== $value) {
+            throw new WrongTypeException($this->getKeyPath($key), $value, 'true');
+        }
+
+        return $value;
     }
 
     public function hasKey(int|string $key): bool
@@ -234,5 +274,17 @@ final class ArrayAccessor implements ArrayAccessorInterface
         }
 
         return null === $this->data[$key];
+    }
+
+    private static function assertFlags(int $flags, int $mask): void
+    {
+        if (($mask & ~$flags) !== 0) {
+            throw new \InvalidArgumentException('Wrong flags.');
+        }
+    }
+
+    private static function hasFlag(int $flag, int $mask): bool
+    {
+        return ($mask & $flag) !== 0;
     }
 }
