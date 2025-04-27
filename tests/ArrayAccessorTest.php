@@ -165,7 +165,122 @@ final class ArrayAccessorTest extends TestCase
 
     public static function provideGetTrue(): array
     {
-        return [];
+        $f = ArrayAccessor::FILLED;
+        $n = ArrayAccessor::NOTNULL;
+        $p = ArrayAccessor::PARSED;
+        $r = ArrayAccessor::REQUIRED;
+
+        return [
+            [['key' => ' 0 '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' 1 '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' 2 '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' fAlSe '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' nO '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' tRuE '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' wRoNg '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' yEs '], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ''], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0.0], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0.1], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1.0], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1.2], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 2], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => []], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => false], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => null], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => true], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+            [[], 'key', $f, null, new \InvalidArgumentException('Wrong flags.')],
+
+            [['key' => ' 0 '], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' 1 '], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' 2 '], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' fAlSe '], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' nO '], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' tRuE '], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' wRoNg '], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' yEs '], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ''], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0.0], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0.1], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1.0], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1.2], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 2], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => []], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => false], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => null], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => true], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+            [[], 'key', $n, null, new \InvalidArgumentException('Wrong flags.')],
+
+            [['key' => ' 0 '], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' 1 '], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' 2 '], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' fAlSe '], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' nO '], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' tRuE '], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' wRoNg '], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ' yEs '], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => ''], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0.0], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0.1], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1.0], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1.2], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 2], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => []], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => false], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => null], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => true], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+            [[], 'key', $r, null, new \InvalidArgumentException('Wrong flags.')],
+
+            [['key' => ' 0 '], 'key', 0, null, new WrongTypeException('key', ' 0 ', 'true')],
+            [['key' => ' 1 '], 'key', 0, null, new WrongTypeException('key', ' 1 ', 'true')],
+            [['key' => ' 2 '], 'key', 0, null, new WrongTypeException('key', ' 2 ', 'true')],
+            [['key' => ' fAlSe '], 'key', 0, null, new WrongTypeException('key', ' fAlSe ', 'true')],
+            [['key' => ' nO '], 'key', 0, null, new WrongTypeException('key', ' nO ', 'true')],
+            [['key' => ' tRuE '], 'key', 0, null, new WrongTypeException('key', ' tRuE ', 'true')],
+            [['key' => ' wRoNg '], 'key', 0, null, new WrongTypeException('key', ' wRoNg ', 'true')],
+            [['key' => ' yEs '], 'key', 0, null, new WrongTypeException('key', ' yEs ', 'true')],
+            [['key' => ''], 'key', 0, null, new WrongTypeException('key', '', 'true')],
+            [['key' => 0.0], 'key', 0, null, new WrongTypeException('key', 0.0, 'true')],
+            [['key' => 0.1], 'key', 0, null, new WrongTypeException('key', 0.1, 'true')],
+            [['key' => 0], 'key', 0, null, new WrongTypeException('key', 0, 'true')],
+            [['key' => 1.0], 'key', 0, null, new WrongTypeException('key', 1.0, 'true')],
+            [['key' => 1.2], 'key', 0, null, new WrongTypeException('key', 1.2, 'true')],
+            [['key' => 1], 'key', 0, null, new WrongTypeException('key', 1, 'true')],
+            [['key' => 2], 'key', 0, null, new WrongTypeException('key', 2, 'true')],
+            [['key' => []], 'key', 0, null, new WrongTypeException('key', [], 'true')],
+            [['key' => false], 'key', 0, null, new WrongTypeException('key', false, 'true')],
+            [['key' => null], 'key', 0, null, new NullValueException('key')],
+            [['key' => true], 'key', 0, true, null],
+            [[], 'key', 0, null, new MissingKeyException('key')],
+
+            [['key' => ' 0 '], 'key', $p, null, new WrongTypeException('key', ' 0 ', 'true')],
+            [['key' => ' 1 '], 'key', $p, true, null],
+            [['key' => ' 2 '], 'key', $p, null, new WrongTypeException('key', ' 2 ', 'true')],
+            [['key' => ' fAlSe '], 'key', $p, null, new WrongTypeException('key', ' fAlSe ', 'true')],
+            [['key' => ' nO '], 'key', $p, null, new WrongTypeException('key', ' nO ', 'true')],
+            [['key' => ' tRuE '], 'key', $p, true, null],
+            [['key' => ' wRoNg '], 'key', $p, null, new WrongTypeException('key', ' wRoNg ', 'true')],
+            [['key' => ' yEs '], 'key', $p, true, null],
+            [['key' => ''], 'key', $p, null, new WrongTypeException('key', '', 'true')],
+            [['key' => 0.0], 'key', $p, null, new WrongTypeException('key', 0.0, 'true')],
+            [['key' => 0.1], 'key', $p, null, new WrongTypeException('key', 0.1, 'true')],
+            [['key' => 0], 'key', $p, null, new WrongTypeException('key', 0, 'true')],
+            [['key' => 1.0], 'key', $p, null, new WrongTypeException('key', 1.0, 'true')],
+            [['key' => 1.2], 'key', $p, null, new WrongTypeException('key', 1.2, 'true')],
+            [['key' => 1], 'key', $p, true, null],
+            [['key' => 2], 'key', $p, null, new WrongTypeException('key', 2, 'true')],
+            [['key' => []], 'key', $p, null, new WrongTypeException('key', [], 'true')],
+            [['key' => false], 'key', $p, null, new WrongTypeException('key', false, 'true')],
+            [['key' => null], 'key', $p, null, new NullValueException('key')],
+            [['key' => true], 'key', $p, true, null],
+            [[], 'key', $p, null, new MissingKeyException('key')],
+        ];
     }
 
     public static function provideGetTrueOptional(): array
@@ -529,9 +644,19 @@ final class ArrayAccessorTest extends TestCase
         self::markTestIncomplete();
     }
 
-    public function testGetTrue(): void
-    {
-        self::markTestIncomplete();
+    #[DataProvider('provideGetTrue')]
+    public function testGetTrue(
+        array $data,
+        int|string $key,
+        int $flags,
+        ?bool $expected,
+        ?\Throwable $error,
+    ): void {
+        if ($error instanceof \Throwable) {
+            $this->expectExceptionObject($error);
+        }
+
+        self::assertSame($expected, (new ArrayAccessor($data))->getTrue($key, $flags));
     }
 
     #[DataProvider('provideGetTrueOptional')]
