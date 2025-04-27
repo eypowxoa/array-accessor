@@ -172,7 +172,14 @@ final class ArrayAccessorTest extends TestCase
 
     public static function provideHasKey(): array
     {
-        return [];
+        return [
+            [['key' => null], 'key', true],
+            [['key' => null], 'missing', false],
+            [[0 => null], 0, true],
+            [[0 => null], 1, false],
+            [[1 => null], 0, false],
+            [[1 => null], 1, true],
+        ];
     }
 
     public static function provideIsNull(): array
@@ -311,9 +318,10 @@ final class ArrayAccessorTest extends TestCase
         self::markTestIncomplete();
     }
 
-    public function testHasKey(): void
+    #[DataProvider('provideHasKey')]
+    public function testHasKey(array $data, int|string $key, bool $expected): void
     {
-        self::markTestIncomplete();
+        self::assertSame($expected, (new ArrayAccessor($data))->hasKey($key));
     }
 
     public function testIsNull(): void

@@ -222,7 +222,7 @@ final class ArrayAccessor implements ArrayAccessorInterface
 
     public function hasKey(int|string $key): bool
     {
-        throw new \LogicException('Not implemented');
+        return \array_key_exists($key, $this->data);
     }
 
     public function isNull(int|string $key): bool
