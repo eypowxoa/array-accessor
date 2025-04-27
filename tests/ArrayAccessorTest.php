@@ -486,8 +486,11 @@ final class ArrayAccessorTest extends TestCase
     }
 
     #[DataProvider('provideGetKeyPath')]
-    public function testGetKeyPath(string $path, string $key, string $expected): void
-    {
+    public function testGetKeyPath(
+        string $path,
+        string $key,
+        string $expected,
+    ): void {
         self::assertSame($expected, (new ArrayAccessor([], $path))->getKeyPath($key));
     }
 
@@ -547,14 +550,21 @@ final class ArrayAccessorTest extends TestCase
     }
 
     #[DataProvider('provideHasKey')]
-    public function testHasKey(array $data, int|string $key, bool $expected): void
-    {
+    public function testHasKey(
+        array $data,
+        int|string $key,
+        bool $expected,
+    ): void {
         self::assertSame($expected, (new ArrayAccessor($data))->hasKey($key));
     }
 
     #[DataProvider('provideIsNull')]
-    public function testIsNull(array $data, int|string $key, ?bool $expected, ?\Throwable $error): void
-    {
+    public function testIsNull(
+        array $data,
+        int|string $key,
+        ?bool $expected,
+        ?\Throwable $error,
+    ): void {
         if ($error instanceof \Throwable) {
             $this->expectExceptionObject($error);
         }
