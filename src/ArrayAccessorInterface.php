@@ -27,7 +27,7 @@ interface ArrayAccessorInterface
     public const NOTNULL = 8;
 
     /**
-     * Value should be retrieved from a string with the filter_var function.
+     * Value should be retrieved with the filter_var function.
      */
     public const PARSED = 32;
 
