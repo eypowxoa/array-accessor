@@ -859,12 +859,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "ccb0a9329dde81d4481dcfe1fb494a83690c3c52"
+                "reference": "d57a32d0a02402cd6ffb3c8f3586bd725c186520"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/ccb0a9329dde81d4481dcfe1fb494a83690c3c52",
-                "reference": "ccb0a9329dde81d4481dcfe1fb494a83690c3c52",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/d57a32d0a02402cd6ffb3c8f3586bd725c186520",
+                "reference": "d57a32d0a02402cd6ffb3c8f3586bd725c186520",
                 "shasum": ""
             },
             "require": {
@@ -957,7 +957,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-25T04:38:41+00:00"
+            "time": "2025-04-26T09:02:27+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -2515,12 +2515,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "3fe23dd6d9c692ec019ba1cff225f960699a0da3"
+                "reference": "c96e48da0eb4ba3f14ca6ab39a6fd5025a5d0838"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/3fe23dd6d9c692ec019ba1cff225f960699a0da3",
-                "reference": "3fe23dd6d9c692ec019ba1cff225f960699a0da3",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c96e48da0eb4ba3f14ca6ab39a6fd5025a5d0838",
+                "reference": "c96e48da0eb4ba3f14ca6ab39a6fd5025a5d0838",
                 "shasum": ""
             },
             "conflict": {
@@ -3436,7 +3436,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-23T02:32:45+00:00"
+            "time": "2025-04-25T17:04:56+00:00"
         },
         {
             "name": "sebastian/cli-parser",
