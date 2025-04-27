@@ -4,7 +4,8 @@
     "license": "MIT",
     "type": "library",
     "require": {
-        "php": "^8.2"
+        "php": "^8.2",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.47",

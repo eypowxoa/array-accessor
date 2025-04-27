@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Eypowxoa\ArrayAccessor\Exceptions;
 
-/**
- * Got null when null is not allowed.
- */
-final class NullValueException extends WrongValueException
+abstract class WrongFieldException extends ArrayAccessException
 {
-    protected string $messageTemplate = 'Field %s can not be null.';
+    protected string $messageTemplate = '';
 
     public function __construct(
-        string $field,
+        protected readonly string $field,
         ?\Throwable $previous = null,
     ) {
-        parent::__construct($field, null, $previous);
+        parent::__construct($this->buildMessage(), 0, $previous);
+    }
+
+    public function getField(): string
+    {
+        return $this->field;
     }
 
     protected function buildMessage(): string
