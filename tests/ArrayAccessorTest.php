@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Eypowxoa\ArrayAccessor\Tests;
 
 use Eypowxoa\ArrayAccessor\ArrayAccessor;
+use Eypowxoa\ArrayAccessor\Exceptions\MissingKeyException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -184,7 +185,19 @@ final class ArrayAccessorTest extends TestCase
 
     public static function provideIsNull(): array
     {
-        return [];
+        return [
+            [['key' => 'value'], 'key', false, null],
+            [['key' => 'value'], 'missing', null, new MissingKeyException('missing')],
+            [['key' => 0], 'key', false, null],
+            [['key' => []], 'key', false, null],
+            [['key' => false], 'key', false, null],
+            [['key' => new \stdClass()], 'key', false, null],
+            [['key' => null], 'key', true, null],
+            [[0 => false], 0, false, null],
+            [[0 => null], 0, true, null],
+            [[1 => null], 1, true, null],
+            [[1 => true], 1, false, null],
+        ];
     }
 
     public function testGetAssociative(): void
@@ -324,8 +337,13 @@ final class ArrayAccessorTest extends TestCase
         self::assertSame($expected, (new ArrayAccessor($data))->hasKey($key));
     }
 
-    public function testIsNull(): void
+    #[DataProvider('provideIsNull')]
+    public function testIsNull(array $data, int|string $key, ?bool $expected, ?\Throwable $error): void
     {
-        self::markTestIncomplete();
+        if ($error instanceof \Throwable) {
+            $this->expectExceptionObject($error);
+        }
+
+        self::assertSame($expected, (new ArrayAccessor($data))->isNull($key));
     }
 }

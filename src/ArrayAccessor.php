@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Eypowxoa\ArrayAccessor;
 
+use Eypowxoa\ArrayAccessor\Exceptions\MissingKeyException;
+
 final class ArrayAccessor implements ArrayAccessorInterface
 {
     public function __construct(
@@ -227,6 +229,10 @@ final class ArrayAccessor implements ArrayAccessorInterface
 
     public function isNull(int|string $key): bool
     {
-        throw new \LogicException('Not implemented');
+        if (!$this->hasKey($key)) {
+            throw new MissingKeyException($this->getKeyPath($key));
+        }
+
+        return null === $this->data[$key];
     }
 }
