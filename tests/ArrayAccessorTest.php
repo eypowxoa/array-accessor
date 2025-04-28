@@ -786,7 +786,66 @@ final class ArrayAccessorTest extends TestCase
 
     public static function provideGetNullOptional(): array
     {
-        return [];
+        $f = ArrayAccessor::FILLED;
+        $n = ArrayAccessor::NOTNULL;
+        $p = ArrayAccessor::PARSED;
+        $r = ArrayAccessor::REQUIRED;
+
+        return [
+            [['key' => ''], 'key', 0, new WrongTypeException('key', '', 'null')],
+            [['key' => 'a'], 'key', 0, new WrongTypeException('key', 'a', 'null')],
+            [['key' => 0], 'key', 0, new WrongTypeException('key', 0, 'null')],
+            [['key' => 1], 'key', 0, new WrongTypeException('key', 1, 'null')],
+            [['key' => false], 'key', 0, new WrongTypeException('key', false, 'null')],
+            [['key' => null], 'key', 0, null],
+            [['key' => true], 'key', 0, new WrongTypeException('key', true, 'null')],
+            [[], 'key', 0, null],
+
+            [['key' => ''], 'key', $f, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 'a'], 'key', $f, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0], 'key', $f, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1], 'key', $f, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => false], 'key', $f, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => null], 'key', $f, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => true], 'key', $f, new \InvalidArgumentException('Wrong flags.')],
+            [[], 'key', $f, new \InvalidArgumentException('Wrong flags.')],
+
+            [['key' => ''], 'key', $n, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 'a'], 'key', $n, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0], 'key', $n, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1], 'key', $n, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => false], 'key', $n, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => null], 'key', $n, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => true], 'key', $n, new \InvalidArgumentException('Wrong flags.')],
+            [[], 'key', $n, new \InvalidArgumentException('Wrong flags.')],
+
+            [['key' => ''], 'key', $p, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 'a'], 'key', $p, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0], 'key', $p, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1], 'key', $p, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => false], 'key', $p, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => null], 'key', $p, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => true], 'key', $p, new \InvalidArgumentException('Wrong flags.')],
+            [[], 'key', $p, new \InvalidArgumentException('Wrong flags.')],
+
+            [['key' => ''], 'key', $p | $r, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 'a'], 'key', $p | $r, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 0], 'key', $p | $r, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => 1], 'key', $p | $r, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => false], 'key', $p | $r, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => null], 'key', $p | $r, new \InvalidArgumentException('Wrong flags.')],
+            [['key' => true], 'key', $p | $r, new \InvalidArgumentException('Wrong flags.')],
+            [[], 'key', $p | $r, new \InvalidArgumentException('Wrong flags.')],
+
+            [['key' => ''], 'key', $r, new WrongTypeException('key', '', 'null')],
+            [['key' => 'a'], 'key', $r, new WrongTypeException('key', 'a', 'null')],
+            [['key' => 0], 'key', $r, new WrongTypeException('key', 0, 'null')],
+            [['key' => 1], 'key', $r, new WrongTypeException('key', 1, 'null')],
+            [['key' => false], 'key', $r, new WrongTypeException('key', false, 'null')],
+            [['key' => null], 'key', $r, null],
+            [['key' => true], 'key', $r, new WrongTypeException('key', true, 'null')],
+            [[], 'key', $r, new MissingKeyException('key')],
+        ];
     }
 
     public static function provideGetString(): array
@@ -1305,9 +1364,18 @@ final class ArrayAccessorTest extends TestCase
         self::markTestIncomplete();
     }
 
-    public function testGetNullOptional(): void
-    {
-        self::markTestIncomplete();
+    #[DataProvider('provideGetNullOptional')]
+    public function testGetNullOptional(
+        array $data,
+        int|string $key,
+        int $flags,
+        ?\Throwable $error,
+    ): void {
+        if ($error instanceof \Throwable) {
+            $this->expectExceptionObject($error);
+        }
+
+        self::assertNull((new ArrayAccessor($data))->getNullOptional($key, $flags));
     }
 
     public function testGetString(): void

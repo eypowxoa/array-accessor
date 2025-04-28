@@ -249,7 +249,21 @@ final class ArrayAccessor implements ArrayAccessorInterface
         int|string $key,
         int $flags = 0,
     ): null {
-        throw new \LogicException('Not implemented');
+        self::assertFlags(self::REQUIRED, $flags);
+
+        if (!$this->hasKey($key)) {
+            $this->assertRequired($key, $flags);
+
+            return null;
+        }
+
+        $value = $this->data[$key];
+
+        if (null !== $value) {
+            throw new WrongTypeException($this->getKeyPath($key), $value, 'null');
+        }
+
+        return null;
     }
 
     public function getString(
