@@ -39,7 +39,33 @@ final class ArrayAccessor implements ArrayAccessorInterface
         int|string $key,
         int $flags = 0,
     ): ?bool {
-        throw new \LogicException('Not implemented');
+        self::assertFlags(self::NOTNULL | self::PARSED | self::REQUIRED, $flags);
+
+        if (!$this->hasKey($key)) {
+            $this->assertRequired($key, $flags);
+
+            return null;
+        }
+
+        $value = $this->data[$key];
+
+        if (null === $value) {
+            $this->assertNotNull($key, $flags);
+
+            return null;
+        }
+
+        $parsed = $this->parseBool($value, $flags);
+
+        if (\is_bool($parsed)) {
+            return $parsed;
+        }
+
+        if (!\is_bool($value)) {
+            throw new WrongTypeException($this->getKeyPath($key), $value, 'bool');
+        }
+
+        return $value;
     }
 
     public function getDate(
