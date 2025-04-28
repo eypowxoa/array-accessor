@@ -78,7 +78,9 @@ final class ArrayAccessor implements ArrayAccessorInterface
         int|string $key,
         int $flags = 0,
     ): false {
-        throw new \LogicException('Not implemented');
+        self::assertFlags(self::PARSED, $flags);
+
+        return $this->getFalseOptional($key, $flags | self::NOTNULL | self::REQUIRED);
     }
 
     public function getFalseOptional(
