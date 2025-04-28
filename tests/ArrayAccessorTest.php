@@ -781,7 +781,16 @@ final class ArrayAccessorTest extends TestCase
 
     public static function provideGetNull(): array
     {
-        return [];
+        return [
+            [['key' => ''], 'key', new WrongTypeException('key', '', 'null')],
+            [['key' => 'a'], 'key', new WrongTypeException('key', 'a', 'null')],
+            [['key' => 0], 'key', new WrongTypeException('key', 0, 'null')],
+            [['key' => 1], 'key', new WrongTypeException('key', 1, 'null')],
+            [['key' => false], 'key', new WrongTypeException('key', false, 'null')],
+            [['key' => null], 'key', null],
+            [['key' => true], 'key', new WrongTypeException('key', true, 'null')],
+            [[], 'key', new MissingKeyException('key')],
+        ];
     }
 
     public static function provideGetNullOptional(): array
@@ -1359,9 +1368,17 @@ final class ArrayAccessorTest extends TestCase
         self::markTestIncomplete();
     }
 
-    public function testGetNull(): void
-    {
-        self::markTestIncomplete();
+    #[DataProvider('provideGetNull')]
+    public function testGetNull(
+        array $data,
+        int|string $key,
+        ?\Throwable $error,
+    ): void {
+        if ($error instanceof \Throwable) {
+            $this->expectExceptionObject($error);
+        }
+
+        self::assertNull((new ArrayAccessor($data))->getNull($key));
     }
 
     #[DataProvider('provideGetNullOptional')]

@@ -242,7 +242,17 @@ final class ArrayAccessor implements ArrayAccessorInterface
     public function getNull(
         int|string $key,
     ): null {
-        throw new \LogicException('Not implemented');
+        if (!$this->hasKey($key)) {
+            throw new MissingKeyException($this->getKeyPath($key));
+        }
+
+        $value = $this->data[$key];
+
+        if (null !== $value) {
+            throw new WrongTypeException($this->getKeyPath($key), $value, 'null');
+        }
+
+        return null;
     }
 
     public function getNullOptional(
