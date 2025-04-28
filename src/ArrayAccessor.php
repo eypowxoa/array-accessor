@@ -85,7 +85,33 @@ final class ArrayAccessor implements ArrayAccessorInterface
         int|string $key,
         int $flags = 0,
     ): ?false {
-        throw new \LogicException('Not implemented');
+        self::assertFlags(self::NOTNULL | self::PARSED | self::REQUIRED, $flags);
+
+        if (!$this->hasKey($key)) {
+            $this->assertRequired($key, $flags);
+
+            return null;
+        }
+
+        $value = $this->data[$key];
+
+        if (null === $value) {
+            $this->assertNotNull($key, $flags);
+
+            return null;
+        }
+
+        $parsed = $this->parseBool($value, $flags);
+
+        if (false === $parsed) {
+            return false;
+        }
+
+        if (false !== $value) {
+            throw new WrongTypeException($this->getKeyPath($key), $value, 'false');
+        }
+
+        return $value;
     }
 
     public function getFloat(
@@ -226,9 +252,7 @@ final class ArrayAccessor implements ArrayAccessorInterface
         self::assertFlags(self::NOTNULL | self::PARSED | self::REQUIRED, $flags);
 
         if (!$this->hasKey($key)) {
-            if (self::hasFlag(self::REQUIRED, $flags)) {
-                throw new MissingKeyException($this->getKeyPath($key));
-            }
+            $this->assertRequired($key, $flags);
 
             return null;
         }
@@ -236,25 +260,15 @@ final class ArrayAccessor implements ArrayAccessorInterface
         $value = $this->data[$key];
 
         if (null === $value) {
-            if (self::hasFlag(self::NOTNULL, $flags)) {
-                throw new NullValueException($this->getKeyPath($key));
-            }
+            $this->assertNotNull($key, $flags);
 
             return null;
         }
 
-        if (self::hasFlag(self::PARSED, $flags)) {
-            if (1 === $value) {
-                return true;
-            }
+        $parsed = $this->parseBool($value, $flags);
 
-            if (\is_string($value)) {
-                $parsed = filter_var($value, FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
-
-                if (true === $parsed) {
-                    return true;
-                }
-            }
+        if (true === $parsed) {
+            return true;
         }
 
         if (true !== $value) {
@@ -285,8 +299,51 @@ final class ArrayAccessor implements ArrayAccessorInterface
         }
     }
 
+    private function assertNotNull(int|string $key, int $flags): void
+    {
+        if (self::hasFlag(self::NOTNULL, $flags)) {
+            throw new NullValueException($this->getKeyPath($key));
+        }
+    }
+
+    private function assertRequired(int|string $key, int $flags): void
+    {
+        if (self::hasFlag(self::REQUIRED, $flags)) {
+            throw new MissingKeyException($this->getKeyPath($key));
+        }
+    }
+
     private static function hasFlag(int $flag, int $mask): bool
     {
         return ($mask & $flag) !== 0;
+    }
+
+    private static function parseBool(mixed $value, int $flags): ?bool
+    {
+        if (!self::hasFlag(self::PARSED, $flags)) {
+            return null;
+        }
+
+        if (0 === $value) {
+            return false;
+        }
+
+        if (1 === $value) {
+            return true;
+        }
+
+        if (\is_string($value)) {
+            $parsed = filter_var($value, FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
+
+            if (false === $parsed) {
+                return false;
+            }
+
+            if (true === $parsed) {
+                return true;
+            }
+        }
+
+        return null;
     }
 }
